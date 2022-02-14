@@ -1,3 +1,5 @@
+alive = True
+
 currentRoom = 1
 caveMap = {
   1: [2, 7, 10],
@@ -9,16 +11,31 @@ caveMap = {
   7: [1, 3, 6, 8],
   8: [2, 7, 9],
   9: [4, 8, 10],
-  10: [1, 6, 9]
+  10: [1, 6, 9, 11],
+  11: []
 
 }
 #maps allow to have nonconsecutive numbers
 
+def niceExitList(roomExits):
+  global alive
+  numExits = len(roomExits)
+  if numExits == 0:
+    alive = False
+    return "You are trapped! this room has no exits and you have starved"
+  if numExits == 1:
+    return f"This room's only exit is to room {roomExits[0]}"
+  if numExits == 2:
+      return f"this room has exits to rooms {roomExits[0] and roomExits[1]}"
+  niceList = "This room has exits to rooms:"
+  for exitNum in range(numExits-1):
+    niceList += f"{roomExits[exitNum]},"
+  niceList += f"an {roomExits[-1]}."
+  return niceList
+
 def look():
   print(f"\nyou are in room {currentRoom}")
-  if len(caveMap[currentRoom]) == 0:
-    print ("You are trapped! This room has no exits.")
-  print(f"Exits lead to room: {caveMap[currentRoom]}")
+  print(niceExitList(caveMap[currentRoom]))
 
   
 def move():
@@ -39,7 +56,7 @@ print()
 
 
 
-while True:
+while alive:
   look()
   nextAction = input("\nWhat's next? ")
   if nextAction.lower()[0] == "m":
